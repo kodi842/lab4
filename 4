@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <locale.h> 
+#include <locale.h>
 
 struct Node {
     int data;
@@ -70,6 +70,18 @@ void print_tree(struct Node *r, int l) {
     print_tree(r->left, l + 1);
 }
 
+// Функция для нахождения уровня элемента в дереве
+int find_level(struct Node *r, int data, int level) {
+    if (r == NULL)
+        return -1;
+    if (r->data == data)
+        return level;
+    int left_level = find_level(r->left, data, level + 1);
+    if (left_level != -1)
+        return left_level;
+    return find_level(r->right, data, level + 1);
+}
+
 int main() {
     setlocale(LC_ALL, ""); // Установка локали
     int D, start = 1;
@@ -93,6 +105,9 @@ int main() {
     struct Node *found = Search(root, D);
     if (found != NULL) {
         printf("Значение %d найдено в дереве.\n", D);
+        // Поиск уровня элемента
+        int level = find_level(root, D, 0);
+        printf("Уровень значения %d: %d\n", D, level);
     } else {
         printf("Значение %d не найдено в дереве.\n", D);
     }
